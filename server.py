@@ -1,8 +1,21 @@
 from fastapi import FastAPI, UploadFile, HTTPException
 from PIL import UnidentifiedImageError as ImgErr
+from fastapi.middleware.cors import CORSMiddleware
 from model import predict
 
 app = FastAPI()
+
+
+origins = ["http://localhost:5500"]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=["POST"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/")
 def root():
@@ -10,22 +23,18 @@ def root():
 
 
 @app.post("/predict")
-async def get_file(file: UploadFile):
+async def get_file_and_predict(file: UploadFile):
     # 5000000 byte = 5 mb
     if file.size is not None and file.size > 5000000:
-        raise HTTPException(
-                status_code=413,
-                detail="Your image must be less than 5mb."
-        )
+        raise HTTPException(status_code=413, detail="Your image must be less than 5mb")
 
     image_bytes = await file.read()
 
     try:
-        pred, prob = predict(image_bytes) 
+        pred, prob = predict(image_bytes)
     except ImgErr:
         raise HTTPException(
-                status_code=415,
-                detail="You can send only jpg and png images!"
+            status_code=415, detail="You can send only jpg and png images"
         )
 
     response = {
@@ -33,4 +42,4 @@ async def get_file(file: UploadFile):
         "prob": prob,
     }
 
-    return response 
+    return response
