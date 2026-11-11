@@ -6,7 +6,9 @@ from model import predict
 
 app = FastAPI()
 
-env = os.getenv("ALLOWED_ORIGINS", "https://example.com")
+env = os.getenv(
+    "ALLOWED_ORIGINS", "https://tertiomodo.github.io/is-banana-rotten-client/"
+)
 origins = env.split(",")
 
 
