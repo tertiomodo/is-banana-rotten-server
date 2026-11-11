@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, UploadFile, HTTPException
 from PIL import UnidentifiedImageError as ImgErr
 from fastapi.middleware.cors import CORSMiddleware
@@ -5,8 +6,8 @@ from model import predict
 
 app = FastAPI()
 
-
-origins = ["http://localhost:5500"]
+env = os.getenv("ALLOWED_ORIGINS", "https://example.com")
+origins = env.split(",")
 
 
 app.add_middleware(
