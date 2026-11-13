@@ -6,14 +6,14 @@ from model import predict
 
 app = FastAPI()
 
-env = os.getenv("ALLOWED_ORIGINS", "https://tertiomodo.github.io")
+env = os.getenv("ALLOWED_ORIGINS")
 origins = env.split(",")
 
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_methods=["POST"],
+    allow_methods=["POST", "GET"],
     allow_headers=["*"],
 )
 
