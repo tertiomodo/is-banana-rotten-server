@@ -2,7 +2,7 @@ import onnxruntime as ort
 from to_tensor import image_to_tensor
 from softmax import softmax
 
-vocab = ["fresh", "rotten"]
+vocab = ["fresh", "other", "rotten"]
 
 sess = ort.InferenceSession("models/is_banana_rotten.onnx")
 inp = sess.get_inputs()[0]
